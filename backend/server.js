@@ -19,6 +19,7 @@ const expenses = [
   {
     id: 3,
     description: "Cabs",
+
     amount: 2000,
     paidBy: "Kunal",
   },
@@ -54,6 +55,37 @@ app
     const index = expenses.findIndex((expense) => expense.id == id);
     expenses.splice(index, 1);
     return res.status(204).json({ message: "Succesfully deleted the expense" });
+  })
+  .patch((req, res) => {
+    const id = Number(req.params.id);
+    const body = req.body;
+    const modifyExpense = expenses.find(
+      (modifyExpense) => modifyExpense.id == id,
+    );
+    if (!modifyExpense)
+      return res.status(404).json({ message: "Expense cannot be updated" });
+    // Object.assign(modifyExpense, {}); -> using this approach , one can modify all the body params even the id ..which shouldn't be modified . 
+    //Better to explicitly mention what can be modified so we have more control
+    if(body.description!= undefined) modifyExpense.description = body.description;
+    if(body.amount!= undefined) modifyExpense.amount = body.amount;
+    if(body.paidBy!= undefined) modifyExpense.paidBy = body.paidBy;
+    return res.status(200).json(modifyExpense);
+  })
+  .put((req, res) => {
+    const id = Number(req.params.id);
+    const body = req.body;
+    const expense = expenses.find((expense) => expense.id == id);
+    if (!expense) return res.status(404).json({ message: "Expense not found" });
+    if (!body.description || !body.amount || !body.paidBy) {
+      return res
+        .status(400)
+        .json({ msg: "PUT requires all fields: description, amount, paidBy" });
+    }
+    expense.description = body.description;
+    expense.amount = body.amount;
+    expense.paidBy = body.paidBy;
+
+    return res.status(200).json(expense);
   });
 
 app.post("/api/expenses", (req, res) => {
