@@ -1,29 +1,30 @@
 const express = require("express");
 const app = express();
-const fs = require("fs");
+const mongoose = require("mongoose");
 const PORT = 8000;
 
-const expenses = [
-  {
-    id: 1,
-    description: "Hotel",
-    amount: 8000,
-    paidBy: "Simran",
-  },
-  {
-    id: 2,
-    description: "Food",
-    amount: 3000,
-    paidBy: "Riya",
-  },
-  {
-    id: 3,
-    description: "Cabs",
+mongoose.connect("mongodb://localhost:27017/splitstack")
+.then(()=> console.log("Connected to MongoDb"))
+.catch((err)=> console.log("Error while connecting to MongoDb", err));
 
-    amount: 2000,
-    paidBy: "Kunal",
+const expenseSchema = new mongoose.Schema({
+  description: {
+    type: String,
+    required: true,
   },
-];
+  amount: {
+    type: Number,
+    required: true,
+  },
+  paidBy: {
+    type: String,
+    required: true,
+  }
+},
+{timestamps: true,});
+
+const Expense = mongoose.model("Expense", expenseSchema);
+
 app.use((req, res, next) => {
   const log = `${new Date().toISOString()} ${req.method} ${req.url}\n`;
   fs.appendFile("log.txt", log, (err) => {
@@ -66,9 +67,9 @@ app
       return res.status(404).json({ message: "Expense cannot be updated" });
     // Object.assign(modifyExpense, {}); -> using this approach , one can modify all the body params even the id ..which shouldn't be modified . 
     //Better to explicitly mention what can be modified so we have more control
-    if(body.description!= undefined) modifyExpense.description = body.description;
-    if(body.amount!= undefined) modifyExpense.amount = body.amount;
-    if(body.paidBy!= undefined) modifyExpense.paidBy = body.paidBy;
+    if(body.description!== undefined) modifyExpense.description = body.description;
+    if(body.amount!== undefined) modifyExpense.amount = body.amount;
+    if(body.paidBy!== undefined) modifyExpense.paidBy = body.paidBy;
     return res.status(200).json(modifyExpense);
   })
   .put((req, res) => {
