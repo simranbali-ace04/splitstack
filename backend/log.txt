@@ -74,3 +74,4 @@
 2026-09-04T17:54:10.582Z GET /api/expenses
 2026-09-04T17:54:37.759Z POST /api/expenses
 2026-09-04T17:54:43.117Z GET /api/expenses
+2026-09-04T18:08:08.035Z GET /api/expenses
