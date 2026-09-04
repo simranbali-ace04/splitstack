@@ -1,33 +1,14 @@
 const express = require("express");
 const app = express();
 const fs = require("fs");
-const mongoose = require("mongoose");
 const PORT = 8000;
+const connectDB = require("./config/db");
+const Expense = require("./models/expense.model");
 
-mongoose
-  .connect("mongodb://localhost:27017/splitstack")
+connectDB("mongodb://localhost:27017/splitstack")
   .then(() => console.log("Connected to MongoDb"))
   .catch((err) => console.log("Error while connecting to MongoDb", err));
 
-const expenseSchema = new mongoose.Schema(
-  {
-    description: {
-      type: String,
-      required: true,
-    },
-    amount: {
-      type: Number,
-      required: true,
-    },
-    paidBy: {
-      type: String,
-      required: true,
-    },
-  },
-  { timestamps: true },
-);
-
-const Expense = mongoose.model("Expense", expenseSchema);
 
 app.use((req, res, next) => {
   const log = `${new Date().toISOString()} ${req.method} ${req.url}\n`;
