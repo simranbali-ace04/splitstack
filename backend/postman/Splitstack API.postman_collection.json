@@ -1,0 +1,149 @@
+{
+  "info": {
+    "_postman_id": "c58365cf-08d9-40b2-afd8-b772e5675a72",
+    "name": "Splitstack API",
+    "description": "**SplitStack REST API** — Expense management API built with Node.js, Express, MongoDB and Mongoose.\n\nThis collection contains the available Expense CRUD endpoints for testing and development.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57503883",
+    "_collection_link": "https://go.postman.co/collection/57503883-c58365cf-08d9-40b2-afd8-b772e5675a72?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get all expenses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/expenses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "expenses"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get an expense by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/expenses/6a98473e6d5d1ad68890df4b",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "expenses", "6a98473e6d5d1ad68890df4b"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create an expense",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "description",
+              "value": "Handbag"
+            },
+            {
+              "key": "amount",
+              "value": "300"
+            },
+            {
+              "key": "paidBy",
+              "value": "Himanshi "
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/expenses",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "expenses"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update an expense",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "description",
+              "value": "Metro fare"
+            },
+            {
+              "key": "amount",
+              "value": "210"
+            },
+            {
+              "key": "paidBy",
+              "value": "Srishti"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/expenses/6a9b05dd5687e2052605428d",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "expenses", "6a9b05dd5687e2052605428d"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Modify an expense",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "description ",
+              "value": "Waffle"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8000/api/expenses/6a984fb46d5d1ad68890df4c",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "expenses", "6a984fb46d5d1ad68890df4c"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete an expense",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/api/expenses/6a98473e6d5d1ad68890df4b",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["api", "expenses", "6a98473e6d5d1ad68890df4b"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
