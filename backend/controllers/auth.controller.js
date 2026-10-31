@@ -55,7 +55,7 @@ async function handleLogin(req, res) {
       maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
       path: "/",
     });
-    return res.status(200).json({ message: "Login successful", token });
+    return res.status(200).json({ message: "Login successful"});
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
@@ -66,7 +66,6 @@ async function handleLogout(req, res) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
     path: "/",
   });
   return res.status(200).json({ message: "Logout successful" });
