@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 const PORT = process.env.PORT || 8000;
+const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const Expense = require("./models/expense.model");
 const expenseRoutes = require("./routes/expense.routes");
@@ -19,6 +20,7 @@ app.use(logResReq("log.txt"));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes );
 

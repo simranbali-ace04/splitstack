@@ -11,3 +11,6 @@
 2026-10-21T21:20:38.056Z GET /api/expenses
 2026-10-21T21:21:17.752Z GET /api/expenses
 2026-10-21T21:22:42.521Z GET /api/expenses
+2026-10-31T17:27:55.482Z POST /api/auth/login
+2026-10-31T17:31:13.205Z POST /api/auth/logout
+2026-10-31T17:32:09.298Z POST /api/auth/logout
