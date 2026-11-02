@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const Expense = require("./models/expense.model");
 const expenseRoutes = require("./routes/expense.routes");
 const authRoutes = require("./routes/auth.routes");
+const groupRoutes = require("./routes/group.routes");
 const {logResReq} = require("./middlewares/expense.middleware");
 const { verifyToken } = require("./middlewares/auth.middleware");
 
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes );
-
+app.use("/api/groups", verifyToken, groupRoutes);
 app.use("/api/expenses", verifyToken, expenseRoutes);
 
 app.listen(PORT, () => {
