@@ -16,7 +16,6 @@ connectDB(process.env.MONGO_URI)
   .then(() => console.log("Connected to MongoDb"))
   .catch((err) => console.log("Error while connecting to MongoDb", err));
 
-
 app.use(logResReq("log.txt"));
 
 app.use(express.urlencoded({ extended: false }));
