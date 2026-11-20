@@ -17,9 +17,21 @@ async function handleGetAllExpenses(req, res) {
 }
 
 async function handleGetExpenseById(req, res) {
-  const expense = await Expense.findById(req.params.id);
-  if (!expense) return res.status(404).json({ error: "Expense not found" });
-  return res.status(200).json(expense);
+  try {
+    const expense = await Expense.findOne({
+      id: req.params.id,
+      group: req.group.id,
+    });
+    if (!expense) {
+      return res.status(404).json({ error: "Expense not found" });
+    }
+    return res.status(200).json(expense);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error fetching expense",
+      error: error.message,
+    });
+  }
 }
 
 async function handleDeleteExpense(req, res) {
