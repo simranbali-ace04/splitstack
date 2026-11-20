@@ -73,19 +73,7 @@ async function handleGetGroups(req, res) {
 
 async function handleGetGroupById(req, res) {
   try {
-    const group = await Group.findById(req.params.groupid).populate(
-      "members.user",
-      "name email",
-    );
-    if (!group) {
-      return res.status(404).json({ message: "Group not found" });
-    }
-    const isMember = group.members.some(
-      (member) => member.user._id.toString() === req.user.id.toString(),
-    );
-    if(!isMember){
-      return res.status(403).json({ message: "You are not a member of this group" });
-    }
+    const group = await req.group.populate("members.user", "name email");
     return res.status(200).json(group);
   } catch (err) {
     return res
@@ -95,30 +83,37 @@ async function handleGetGroupById(req, res) {
 }
 
 async function handleAddGroupMembers(req, res) {
-  try{
-    const groupId = req.params.groupid;
-    if (!mongoose.isObjectIdOrHexString(groupId)) { // Validate group ID (the method helps in distinguishing between valid and invalid ObjectId strings through mongoose id formatting)
-      return res.status(400).json({
-        message: "Invalid group ID",
-      });
-    }
-    const group = await Group.findById(groupId);
-    if (!group) {
-      return res.status(404).json({ message: "Group not found" });
-    }
-    const currentMember = group.members.find(
-      (member) => member.user.toString() === req.user.id.toString(), //converting the object to string to compare with the user id from the request
-    );
-    if(!currentMember){
-      return res.status(403).json({ message: "You are not a member of this group" });
-    }
-    if(currentMember.role!="admin"){
-      return res.status(403).json({
-        message: "Only admins can add members",
-      });
-    }
+  try {
+    // MOVED TO verifyGroupMember MIDDLEWARE:
+    // const groupId = req.params.groupid;
+    // if (!mongoose.isObjectIdOrHexString(groupId)) {
+    //   // Validate group ID (the method helps in distinguishing between valid and invalid ObjectId strings through mongoose id formatting)
+    //   return res.status(400).json({
+    //     message: "Invalid group ID",
+    //   });
+    // }
+    // const group = await Group.findById(groupId);
+    // if (!group) {
+    //   return res.status(404).json({ message: "Group not found" });
+    // }
+     // MOVED TO verifyAdmin MIDDLEWARE:
+    // const currentMember = group.members.find(
+    //   (member) => member.user.toString() === req.user.id.toString(), //converting the object to string to compare with the user id from the request
+    // );
+    // if (!currentMember) {
+    //   return res
+    //     .status(403)
+    //     .json({ message: "You are not a member of this group" });
+    // }
+    // if (currentMember.role != "admin") {
+    //   return res.status(403).json({
+    //     message: "Only admins can add members",
+    //   });
+    // }
+    const group = req.group; // Access the group from the request object set by the verifyGroupMember middleware
     const { members } = req.body;
-    if (!Array.isArray(members) || members.length === 0) { // Validate that members is an array and not empty
+    if (!Array.isArray(members) || members.length === 0) {
+      // Validate that members is an array and not empty
       return res.status(400).json({
         message: "Please provide at least one member ID",
       });
@@ -130,12 +125,16 @@ async function handleAddGroupMembers(req, res) {
     if (invalidIds) {
       return res.status(400).json({ message: "Invalid member IDs provided" });
     }
-    const existingMemberIds = group.members.map((member) => member.user.toString());
+    const existingMemberIds = group.members.map((member) =>
+      member.user.toString(),
+    );
     const newMemberIds = memberIds.filter(
       (id) => !existingMemberIds.includes(id.toString()),
     );
-    if(newMemberIds.length === 0){
-      return res.status(400).json({ message: "All provided members are already in the group" });
+    if (newMemberIds.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "All provided members are already in the group" });
     }
     const users = await User.find({
       _id: { $in: newMemberIds },
@@ -151,14 +150,15 @@ async function handleAddGroupMembers(req, res) {
     }));
     group.members.push(...newMembers);
     await group.save();
-    return res.status(200).json({ message: "Members added successfully", group });
+    return res
+      .status(200)
+      .json({ message: "Members added successfully", group });
   } catch (err) {
     return res
       .status(500)
       .json({ message: "Error adding members", error: err.message });
   }
 }
-
 
 module.exports = {
   handleCreateGroup,
