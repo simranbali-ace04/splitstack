@@ -2,10 +2,20 @@ const Expense = require("../models/expense.model");
 const mongoose = require("mongoose");
 
 async function handleGetAllExpenses(req, res) {
-  const expenses = await Expense.find({});
-  res.setHeader("X-Total-Expenses", expenses.length);
-  return res.json(expenses);
+  try {
+    const expenses = await Expense.find({
+      group: req.group.id,
+    });
+    res.setHeader("X-Total-Expenses", expenses.length);
+    return res.json(expenses);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error fetching group expenses",
+      error: error.message,
+    });
+  }
 }
+
 async function handleGetExpenseById(req, res) {
   const expense = await Expense.findById(req.params.id);
   if (!expense) return res.status(404).json({ error: "Expense not found" });
