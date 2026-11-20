@@ -6,11 +6,22 @@ const {
   handleGetGroupById,
   handleAddGroupMembers,
 } = require("../controllers/group.controller");
-const { verifyGroupMember, verifyAdmin } = require("../middlewares/group.middleware");
+const {
+  verifyGroupMember,
+  verifyAdmin,
+} = require("../middlewares/group.middleware");
+const expenseRoutes = require("./expense.routes");
 
 Router.post("/", handleCreateGroup);
 Router.get("/", handleGetGroups);
 Router.get("/:groupid", verifyGroupMember, handleGetGroupById);
-Router.patch("/:groupid/members", verifyGroupMember, verifyAdmin, handleAddGroupMembers);
+Router.patch(
+  "/:groupid/members",
+  verifyGroupMember,
+  verifyAdmin,
+  handleAddGroupMembers,
+);
+
+Router.use("/:groupid/expenses", verifyGroupMember, expenseRoutes);
 
 module.exports = Router;
